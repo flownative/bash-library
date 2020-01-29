@@ -30,7 +30,6 @@ with_backoff() {
             was_executed=1
             break
         fi
-        debug "attempt $attempt"
         warn "Command failed, waiting ${current_timeout} until retry."
         sleep $current_timeout
         current_timeout=$(( current_timeout * 2 ))
