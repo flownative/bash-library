@@ -12,7 +12,7 @@ set -u
 # @return exit code
 #
 packages_install() {
-    local -r packages="${1:?missing package names}"
+    local -r packages="${@:?missing package names}"
     export DEBIAN_FRONTEND=noninteractive
 
     cat > /etc/dpkg/dpkg.cfg.d/01_nodoc <<- EOM
@@ -40,7 +40,16 @@ EOM
 # @return exit code
 #
 packages_apt_get_install() {
-    apt-get update -qq && apt-get install -y --no-install-recommends "$@"
+    apt-get update -qq \
+    && apt-get install \
+        -o Dpkg::Options::=--force-confold \
+        -o Dpkg::Options::=--force-confdef \
+        -y \
+        --allow-downgrades \
+        --allow-remove-essential \
+        --allow-change-held-packages \
+        --no-install-recommends \
+        "$@"
 }
 
 # ---------------------------------------------------------------------------------------
