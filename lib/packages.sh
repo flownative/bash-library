@@ -15,10 +15,22 @@ packages_install() {
     local -r packages="${1:?missing package names}"
     export DEBIAN_FRONTEND=noninteractive
 
-    info "Installing the following packages: ${packages}"
-    with_backoff "packages_apt_get_install ${packages}" || (error "Failed installing packages"; exit 1)
+    cat > /etc/dpkg/dpkg.cfg.d/01_nodoc <<- EOM
+# /etc/dpkg/dpkg.cfg.d/01_nodoc
 
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+# Don't install locales
+path-exclude=/usr/share/locale/*
+
+# Don't install manpages
+path-exclude=/usr/share/man/*
+
+# Don't install docs
+path-exclude=/usr/share/doc/*
+path-include=/usr/share/doc/*/copyright
+EOM
+
+    info "📦 Installing the following packages: ${packages}"
+    with_backoff "packages_apt_get_install ${packages}" || (error "Failed installing packages"; exit 1)
 }
 
 # ---------------------------------------------------------------------------------------
@@ -29,4 +41,22 @@ packages_install() {
 #
 packages_apt_get_install() {
     apt-get update -qq && apt-get install -y --no-install-recommends "$@"
+}
+
+# ---------------------------------------------------------------------------------------
+# packages_remove_docs_and_caches() - Removes all manpages, docs and various caches
+#
+# @return void
+#
+packages_remove_docs_and_caches() {
+    info "🧹 Removing cache files and documentation ..."
+    rm -rf \
+        /var/cache/apt/archives \
+        /var/cache/debconf \
+        /var/lib/apt/lists \
+        /var/log/apt/* \
+        /var/log/dpkg* \
+        /usr/share/doc/* \
+        /usr/share/man/* \
+        /usr/share/locale/*
 }
