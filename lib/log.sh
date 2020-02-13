@@ -36,6 +36,21 @@ debug() {
 }
 
 # ---------------------------------------------------------------------------------------
+# debug_device() – Returns "/dev/stdout" if in debug mode, otherwise "/dev/null"
+#
+# @return void
+#
+debug_device() {
+    local -r bool="${LOG_DEBUG:-false}"
+    shopt -s nocasematch
+    if [[ "$bool" == 1 || "$bool" =~ ^(yes|true)$ ]]; then
+        echo "/dev/stdout"
+    else
+        echo "/dev/null"
+    fi
+}
+
+# ---------------------------------------------------------------------------------------
 # log() - Log a message
 #
 # @arg The message to log
