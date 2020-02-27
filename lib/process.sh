@@ -14,6 +14,18 @@ is_process_running() {
 }
 
 # ---------------------------------------------------------------------------------------
+# is_process_not_running() - Checks if the specified process is not running
+#
+# @arg The process id (PID)
+# @return bool 0 if the process is not running, otherwise 1
+#
+is_process_not_running() {
+    local -r pid="${1:?missing nginx.conf.template}"
+    kill -0 "${pid}" 2>/dev/null && return 1
+    return 0
+}
+
+# ---------------------------------------------------------------------------------------
 # process_stop() - Stops a process specified by PID
 #
 # @arg The process id (PID)
@@ -21,9 +33,9 @@ is_process_running() {
 #
 process_stop() {
     local -r pid="${1:?missing process id}"
-
     kill -s QUIT "${pid}"
-    with_backoff "is_process_running $pid" || kill -9 "${pid}" 2>/dev/null
+    sleep 2
+    with_backoff "is_process_not_running $pid" || kill -9 "${pid}" 2>/dev/null
 }
 
 # ---------------------------------------------------------------------------------------
