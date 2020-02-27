@@ -22,8 +22,8 @@ is_process_running() {
 process_stop() {
     local -r pid="${1:?missing process id}"
 
-    kill "${pid}"
-    with_backoff "[[ $(is_process_running "${pid}") != 0 ]]" || kill -9 "${pid}" 2>/dev/null
+    kill -s QUIT "${pid}"
+    with_backoff "is_process_running $pid" || kill -9 "${pid}" 2>/dev/null
 }
 
 # ---------------------------------------------------------------------------------------
