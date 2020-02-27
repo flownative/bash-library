@@ -29,11 +29,13 @@ is_process_not_running() {
 # process_stop() - Stops a process specified by PID
 #
 # @arg The process id (PID)
+# @arg (optional) The signal to send. Default: "QUIT". Other possible signals: "TERM", "INT" ...
 # @return void
 #
 process_stop() {
     local -r pid="${1:?missing process id}"
-    kill -s QUIT "${pid}"
+    local signal="${2:-QUIT}"
+    kill -s "${signal}" "${pid}"
     sleep 2
     with_backoff "is_process_not_running $pid" || kill -9 "${pid}" 2>/dev/null
 }
