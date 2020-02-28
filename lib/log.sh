@@ -10,6 +10,7 @@ RED='\033[38;5;1m'
 GREEN='\033[38;5;2m'
 YELLOW='\033[38;5;3m'
 MAGENTA='\033[38;5;5m'
+GREY='\033[38;5;7m'
 
 # ---------------------------------------------------------------------------------------
 # stderr_print() - Print to STDERR
@@ -31,7 +32,7 @@ debug() {
     local -r bool="${LOG_DEBUG:-false}"
     shopt -s nocasematch
     if [[ "$bool" == 1 || "$bool" =~ ^(yes|true)$ ]]; then
-        log "${MAGENTA}DEBUG${RESET} ${*}"
+        log "${MAGENTA}DEBUG${RESET}  ${*}"
     fi
 }
 
@@ -57,7 +58,7 @@ debug_device() {
 # @return void
 #
 log() {
-    stderr_print "${MAGENTA}$(date "+%T.%2N ")${RESET}${*}"
+    stderr_print "${MAGENTA}$(date "+%T.%2N ")${RESET} ${*}"
 }
 
 # ---------------------------------------------------------------------------------------
@@ -67,7 +68,7 @@ log() {
 # @return void
 #
 info() {
-    log "${GREEN}INFO ${RESET} ${*}"
+    log "${GREEN}INFO ${RESET}  ${*}"
 }
 
 # ---------------------------------------------------------------------------------------
@@ -77,7 +78,7 @@ info() {
 # @return void
 #
 warn() {
-    log "${YELLOW}WARN ${RESET} ${*}"
+    log "${YELLOW}WARN ${RESET}  ${*}"
 }
 
 # ---------------------------------------------------------------------------------------
@@ -87,5 +88,21 @@ warn() {
 # @return void
 #
 error() {
-    log "${RED}ERROR${RESET} ${*}"
+    log "${RED}ERROR${RESET}  ${*}"
+}
+
+# ---------------------------------------------------------------------------------------
+# output() - Log output of another script or process
+#
+# @arg The message to log
+# @return void
+#
+output() {
+    local message
+    if [ "$*" != "" ]; then
+        message=${*}
+    else
+        read -r message
+    fi
+    log "${GREY}OUTPUT ${message}${RESET}"
 }
