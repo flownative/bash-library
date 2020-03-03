@@ -92,9 +92,11 @@ error() {
 output() {
     local message
     if [ "$*" != "" ]; then
-        message=${*}
-    else
-        read -r message
+        log "\033[38;5;7mOUTPUT ${*}\033[0m"
+        return
     fi
-    log "\033[38;5;7mOUTPUT ${message}\033[0m"
+
+    while read -r message; do
+        log "\033[38;5;7mOUTPUT ${message}\033[0m"
+    done
 }
