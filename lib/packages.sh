@@ -34,6 +34,21 @@ EOM
 }
 
 # ---------------------------------------------------------------------------------------
+# packages_remove() - Remove packages via apt-get
+#
+# @arg A list of packages
+# @return exit code
+#
+packages_remove() {
+    local -r packages="${@:?missing package names}"
+    export DEBIAN_FRONTEND=noninteractive
+
+    info "📦 Removing the following packages: ${packages}"
+
+    apt-get purge -y "$@"
+}
+
+# ---------------------------------------------------------------------------------------
 # packages_apt_get_install() - Internal, runs apt-get update && apt-get install
 #
 # @arg A list of packages
