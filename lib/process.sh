@@ -9,7 +9,7 @@
 # @return bool 0 if the process is running, otherwise >0
 #
 is_process_running() {
-    local -r pid="${1:?missing nginx.conf.template}"
+    local -r pid="${1:?missing process id}"
     kill -0 "${pid}" 2>/dev/null
 }
 
@@ -20,7 +20,7 @@ is_process_running() {
 # @return bool 0 if the process is not running, otherwise 1
 #
 is_process_not_running() {
-    local -r pid="${1:?missing nginx.conf.template}"
+    local -r pid="${1:?missing process id}"
     kill -0 "${pid}" 2>/dev/null && return 1
     return 0
 }
