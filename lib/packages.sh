@@ -46,6 +46,7 @@ packages_remove() {
     info "📦 Removing the following packages: ${packages}"
 
     apt-get purge -y "$@"
+    apt-get autoremove -y
 }
 
 # ---------------------------------------------------------------------------------------
