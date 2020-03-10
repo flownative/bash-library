@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC1090
 
 # =======================================================================================
 # LIBRARY: FILES
@@ -14,9 +15,12 @@
 # @return void
 #
 file_move_if_exists() {
-    if [ -f "${1:?missing source filename}" ]; then
-        mv "${1}" "${2:?missing target path}"
+    local -r source="${1:?missing source path and filename}"
+    local -r target="${2:?missing target path and filename}"
+
+    if [ -f "${source}" ]; then
+        mv "${source}" "${target}"
     else
-        debug "Not moving '$1', because the file does not exist"
+        debug "Not moving '$source', because the file does not exist"
     fi
 }
