@@ -14,7 +14,7 @@
 is_boolean_yes() {
     local -r bool="${1:-}"
     shopt -s nocasematch
-    if [[ "$bool" = 1 || "$bool" =~ ^(yes|true)$ ]]; then
+    if [[ "$bool" = 1 || "$bool" =~ ^(yes|true|on)$ ]]; then
         true
     else
         false
