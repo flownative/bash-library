@@ -29,14 +29,14 @@ banner_flownative() {
 # @return void
 #
 banner_beach_instance() {
-    local -r instance_identifier="${1:?missing instance identifier}"
     local -r instance_name="${1:?missing instance name}"
+    local -r instance_identifier="${2:-}"
 
     if [ "${BANNER_FLOWNATIVE_SKIP}" = "" ]; then
-        echo '[38;5;255;255;255m        [0m[38;5;7m                                             [0m'
-        echo "[38;5;196;48;5;196m       [0m[38;5;255;255;255m   $(printf "%-41s" "Flownative Beach") [0m"
-        echo "[38;5;196;48;5;196m       [0m[38;5;7m   $(printf "%-41s" "${instance_name}") [0m"
-        echo "[38;5;196;48;5;196m       [0m[38;5;7m   $(printf "%-41s" "${instance_identifier}") [0m"
-        echo '[38;5;255;255;255m        [0m[38;5;7m                                             [0m'
+        echo '[38;5;255;255;255m        [0m[38;5;7m                                                                 [0m'
+        echo "[38;5;196;48;5;196m       [0m[38;5;255;255;255m   $(printf "%-61s" "Flownative Beach") [0m"
+        echo "[38;5;196;48;5;196m       [0m[38;5;7m   $(printf "%-61s" "${instance_name}") [0m"
+        echo "[38;5;196;48;5;196m       [0m[38;5;7m   $(printf "%-61s" "${instance_identifier}") [0m"
+        echo '[38;5;255;255;255m        [0m[38;5;7m                                                                 [0m'
     fi
 }
