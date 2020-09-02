@@ -4,6 +4,8 @@
 # LIBRARY: LOG
 # =======================================================================================
 
+export FLOWNATIVE_LOG_PATH=${FLOWNATIVE_LOG_PATH:-/opt/flownative/log}
+
 # ---------------------------------------------------------------------------------------
 # stderr_print() - Print to STDERR
 #
@@ -11,7 +13,7 @@
 # @return void
 #
 stderr_print() {
-    printf "%b\\n" "${*}" >&2
+    printf "%b\\n" "${*}" >> "${FLOWNATIVE_LOG_PATH}/flownative.log"
 }
 
 # ---------------------------------------------------------------------------------------
@@ -24,7 +26,7 @@ debug() {
     local -r bool="${LOG_DEBUG:-false}"
     shopt -s nocasematch
     if [[ "$bool" == 1 || "$bool" =~ ^(yes|true)$ ]]; then
-        log "\033[38;5;5mDEBUG\033[0m  ${*}"
+        log "[debug] ${*}"
     fi
 }
 
@@ -37,7 +39,7 @@ debug_device() {
     local -r bool="${LOG_DEBUG:-false}"
     shopt -s nocasematch
     if [[ "$bool" == 1 || "$bool" =~ ^(yes|true)$ ]]; then
-        echo "/dev/stdout"
+        echo "${FLOWNATIVE_LOG_PATH}/flownative.log"
     else
         echo "/dev/null"
     fi
@@ -50,7 +52,7 @@ debug_device() {
 # @return void
 #
 log() {
-    stderr_print "\033[38;5;5m$(date "+%Y-%m-%d %T.%2N ")\033[0m ${*}"
+    stderr_print "${*}"
 }
 
 # ---------------------------------------------------------------------------------------
@@ -60,7 +62,7 @@ log() {
 # @return void
 #
 info() {
-    log "\033[38;5;2mINFO \033[0m  ${*}"
+    log "[info] ${*}"
 }
 
 # ---------------------------------------------------------------------------------------
@@ -70,7 +72,7 @@ info() {
 # @return void
 #
 warn() {
-    log "\033[38;5;3mWARN \033[0m  ${*}"
+    log "[warn] ${*}"
 }
 
 # ---------------------------------------------------------------------------------------
@@ -80,7 +82,7 @@ warn() {
 # @return void
 #
 error() {
-    log "\033[38;5;1mERROR\033[0m  ${*}"
+    log "[error] ${*}"
 }
 
 # ---------------------------------------------------------------------------------------
@@ -92,11 +94,11 @@ error() {
 output() {
     local message
     if [ "$*" != "" ]; then
-        log "\033[38;5;7mOUTPUT ${*}\033[0m"
+        log "${*}"
         return
     fi
 
     while read -r message; do
-        log "\033[38;5;7mOUTPUT ${message}\033[0m"
+        log "${message}"
     done
 }
