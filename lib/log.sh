@@ -4,7 +4,7 @@
 # LIBRARY: LOG
 # =======================================================================================
 
-export FLOWNATIVE_LOG_PATH=${FLOWNATIVE_LOG_PATH:-/opt/flownative/log}
+export FLOWNATIVE_LOG_PATH_AND_FILENAME=${FLOWNATIVE_LOG_PATH_AND_FILENAME:-/opt/flownative/log/flownative.log}
 
 # ---------------------------------------------------------------------------------------
 # stderr_print() - Print to STDERR
@@ -13,7 +13,7 @@ export FLOWNATIVE_LOG_PATH=${FLOWNATIVE_LOG_PATH:-/opt/flownative/log}
 # @return void
 #
 stderr_print() {
-    printf "%b\\n" "${*}" >> "${FLOWNATIVE_LOG_PATH}/flownative.log"
+    printf "%b\\n" "${*}" >> "${FLOWNATIVE_LOG_PATH_AND_FILENAME}"
 }
 
 # ---------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ debug_device() {
     local -r bool="${LOG_DEBUG:-false}"
     shopt -s nocasematch
     if [[ "$bool" == 1 || "$bool" =~ ^(yes|true)$ ]]; then
-        echo "${FLOWNATIVE_LOG_PATH}/flownative.log"
+        echo "${FLOWNATIVE_LOG_PATH_AND_FILENAME}/flownative.log"
     else
         echo "/dev/null"
     fi
