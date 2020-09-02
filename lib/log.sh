@@ -39,7 +39,7 @@ debug_device() {
     local -r bool="${LOG_DEBUG:-false}"
     shopt -s nocasematch
     if [[ "$bool" == 1 || "$bool" =~ ^(yes|true)$ ]]; then
-        echo "${FLOWNATIVE_LOG_PATH_AND_FILENAME}/flownative.log"
+        echo "${FLOWNATIVE_LOG_PATH_AND_FILENAME}"
     else
         echo "/dev/null"
     fi
