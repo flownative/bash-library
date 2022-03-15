@@ -23,8 +23,21 @@ jobs:
         with:
           ref: ${{ steps.latest_version.outputs.tag }}
           fetch-depth: 100
-      -
-        name: Set up Docker Buildx
+      
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          flavor: |
+            latest=true
+          images: |
+            europe-docker.pkg.dev/flownative/docker/bash-library
+          tags: |
+            type=semver,pattern={{major}},value=${{ steps.latest_version.outputs.version }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ steps.latest_version.outputs.version }}
+            type=semver,pattern={{version}},value=${{ steps.latest_version.outputs.version }}
+
+      - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
 
@@ -41,6 +54,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: |
-            europe-docker.pkg.dev/flownative/docker/bash-library:${{ steps.latest_version.outputs.version }}
-            europe-docker.pkg.dev/flownative/docker/bash-library:latest
+          tags: ${{ steps.meta.outputs.tags }}
