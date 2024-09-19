@@ -14,7 +14,7 @@ jobs:
 
       - name: Determine latest version
         id: latest_version
-        uses: flownative/action-git-latest-release@master
+        uses: flownative/action-git-latest-release@v1
 
       - run: |
           sudo chmod -R ugo+rwX . && shopt -s dotglob && rm -rf *
@@ -23,7 +23,7 @@ jobs:
         with:
           ref: ${{ steps.latest_version.outputs.tag }}
           fetch-depth: 100
-      
+
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v3
